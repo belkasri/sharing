@@ -3,7 +3,7 @@ set +e
 
 DJ_HOST=openam-01.gp.ocean.com
 DJ_ADMIN="cn=Directory Manager"
-DJ_ADMIN_PWD="admin1234"
+DJ_ADMIN_PWD="admin1234" # in prod, best practice is to putit in a file, that is 400.
 DJ_PORT=389
 DJ_PATH="/app/opendj-generic"
 DJ_BASE_DN="dc=example,dc=com"
@@ -20,8 +20,9 @@ time_now=`date +"%F %T"`; line_srv_status=`$DJ_PATH/bin/status -D "${DJ_ADMIN}" 
 # only if dj is running
 if [[ $line_srv_status =~ .*Started.* ]]
 then
-  # user count
-  time_now=`date +"%F %T"`; line_srv_users=`$DJ_PATH/bin/ldapsearch -X -h "${DJ_HOST}" -p "${DJ_PORT}" -D "${DJ_ADMIN}" -w "${DJ_ADMIN_PWD}" --baseDN "${DJ_USERS_BASE_DN}"  --countentries "(objectClass=*)" | grep -e '# Total number of matching entries:' `; echo $time_now $line_srv_users >> ${DJ_USER_COUNT}
+  ## # user count
+  #echo $line_srv_status | grep -e "Entries:" >> $DJ_USER_COUNT
+  ## time_now=`date +"%F %T"`; line_srv_users=`$DJ_PATH/bin/ldapsearch -X -h "${DJ_HOST}" -p "${DJ_PORT}" -D "${DJ_ADMIN}" -w "${DJ_ADMIN_PWD}" --baseDN "${DJ_USERS_BASE_DN}"  --countentries "(objectClass=*)" | grep -e '# Total number of matching entries:' `; echo $time_now $line_srv_users >> ${DJ_USER_COUNT}
 
   # Monitor output
   time_now=`date +"%F %T"`; line_srv_mon=`$DJ_PATH/bin/ldapsearch -X -h "${DJ_HOST}" -p "${DJ_PORT}" -D "${DJ_ADMIN}" -w "${DJ_ADMIN_PWD}" --baseDN "cn=monitor" -s sub "(objectclass=*)" | grep -e 'upTime:' -e 'currentConnections:' -e 'maxConnections:' -e 'totalConnections:' -e 'cn: userRoot backend' -e 'disk-dir:' -e 'disk-free:'`; echo $time_now $line_srv_mon > ${DJ_MONITOR_FILE}

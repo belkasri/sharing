@@ -1,8 +1,8 @@
 #!/bin/bash
 set +e
 
-IDM_LOG="recon.audit.json-abdel.txt"
-ACTION_COUNT="/tmp/activities_count.txt"
+IDM_LOG="/root/staples/recon.audit.json-abdel.txt"
+ACTION_COUNT="results/activities_count.txt"
 
 
 # updates count
